@@ -3,6 +3,8 @@ const queue = require('d3-queue').queue;
 const Jimp = require('jimp');
 const PasteBitmaps = require('paste-bitmaps');
 const probable = require('probable');
+const roll = probable.roll;
+const rollDie = probable.rollDie;
 const values = require('lodash.values');
 const easeCubicInOut = require('d3-ease').easeCubicInOut;
 
@@ -64,24 +66,28 @@ function ComposeScene(createOpts, createDone) {
       }
       // bigThing.brightness(-1);
 
-      const imageWidth = bigThing.bitmap.width * (3 + probable.roll(1));
-      const imageHeight = bigThing.bitmap.height * (3 + probable.roll(1));
+      const imageWidth = 1280;
+      const imageHeight = 768;
 
       if (bigThing.bitmap.width < 320) {
         bigThing.resize(320, Jimp.AUTO);
       }
-      if (smallThing.bitmap.width > 128) {
-        smallThing.resize(128, Jimp.AUTO, Jimp.RESIZE_NEAREST_NEIGHBOR);
+      else if (bigThing.bitmap.width > 960 || bigThing.bitmap.height > 540) {
+        bigThing.contain(960, 540);
       }
 
-      var bigImageSpecs = placeInstances(bigThing, 1);//probable.rollDie(3));
-      var smallImageSpecs = placeSwarm(smallThing, 100, bigImageSpecs);
+      if (smallThing.bitmap.width > 128) {
+        smallThing.resize(128, Jimp.AUTO);
+      }
+
+      var bigImageSpecs = placeInstances(bigThing, rollDie(3));
+      var smallImageSpecs = placeSwarm(smallThing, 100 + roll(150), bigImageSpecs);
 
       var pasteOpts = {
         background: {
           width: imageWidth,
           height: imageHeight,
-          fill: 0xFFFFFFFF
+          fill: roll(3) === 0 ? 0xFFFFFFFF : Jimp.rgbaToInt(roll(256), roll(256), roll(256), 0xFF)
         },
         images: bigImageSpecs.concat(smallImageSpecs)
       };
@@ -96,8 +102,8 @@ function ComposeScene(createOpts, createDone) {
         for (var i = 0; i < numberOfThings; ++i) {
           imageSpecs.push({
             jimpImage: thing,
-            x: marginX + probable.roll(imageWidth - 2 * marginX - thing.bitmap.width/2),
-            y: marginY + probable.roll(imageHeight - 2 * marginY - thing.bitmap.height/2)
+            x: marginX + roll(imageWidth - 2 * marginX - thing.bitmap.width/2),
+            y: marginY + roll(imageHeight - 2 * marginY - thing.bitmap.height/2)
           });
         }
         return imageSpecs;
@@ -108,27 +114,42 @@ function ComposeScene(createOpts, createDone) {
 
         for (var i = 0; i < numberOfThings; ++i) {
           var targetSpec = probable.pickFromArray(targetSpecs);
-          var maxDistanceX = imageWidth/3;
+          var maxDistanceX = imageWidth/3 * 2;
           if (targetSpec.x > maxDistanceX) {
             maxDistanceX = targetSpec.x;
           }
-          var minDistanceX = targetSpec.jimpImage.bitmap.width/5;
+          var minDistanceX = targetSpec.jimpImage.bitmap.width/8;
 
-          var maxDistanceY = imageWidth/3;
+          var maxDistanceY = imageWidth/3 * 2;
           if (targetSpec.y > maxDistanceY) {
             maxDistanceY = targetSpec.y;
           }
-          var minDistanceY = targetSpec.jimpImage.bitmap.height/5;
+          var minDistanceY = targetSpec.jimpImage.bitmap.height/8;
 
           var maxRadius = (maxDistanceX + maxDistanceY)/ 2;
           var minRadius = (minDistanceX + minDistanceY)/ 2;
           
-          var angle = 2 * Math.PI * probable.roll(100)/100;
+          var angle = 2 * Math.PI * roll(100)/100;
           var radius = minRadius +
-            (Math.log(probable.roll(100))/5) * (maxRadius - minRadius);
+            (roll(50) + roll(50))/100 * (maxRadius - minRadius);
+
+          var specImage = thing.clone().rotate(roll(360))
+          if (roll(10) === 0) {
+            specImage.invert();
+          }
+          if (roll(5) == 0) {
+            specImage.color(
+              [
+                {
+                  apply: 'hue',
+                  params: [roll(360)]
+                }
+              ]
+            );
+          }
 
           imageSpecs.push({
-            jimpImage: thing.clone().rotate(probable.roll(360)),
+            jimpImage: specImage,
             x: targetSpec.x + targetSpec.jimpImage.bitmap.width/2 + radius * Math.cos(angle),
             y: targetSpec.y + targetSpec.jimpImage.bitmap.height/2 + radius * Math.sin(angle) 
           });

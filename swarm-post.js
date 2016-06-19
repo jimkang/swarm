@@ -58,7 +58,6 @@ function postComposedImage(result, done) {
     caption: '♪ DOO DOO DOO DOO! ♪'
   };
 
-
   if (dryRun) {
     const filename = 'image-output/would-have-posted-' +
       (new Date()).toISOString().replace(/:/g, '-') +
