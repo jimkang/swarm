@@ -78,7 +78,8 @@ function ComposeScene(createOpts, createDone) {
       }
 
       var bigImageSpecs = placeInstances(bigThing, rollDie(3));
-      var smallImageSpecs = placeSwarm(smallThing, 100 + roll(150), bigImageSpecs);
+      var imageSpecs = placeSwarm(smallThing, 100 + roll(150), bigImageSpecs);
+      bigImageSpecs.forEach(insertSpecAtRandomPlace);
 
       var pasteOpts = {
         background: {
@@ -86,10 +87,14 @@ function ComposeScene(createOpts, createDone) {
           height: imageHeight,
           fill: roll(3) === 0 ? 0xFFFFFFFF : Jimp.rgbaToInt(roll(256), roll(256), roll(256), 0xFF)
         },
-        images: bigImageSpecs.concat(smallImageSpecs)
+        images: imageSpecs
       };
 
       pasteBitmaps(pasteOpts, sceneDone);
+
+      function insertSpecAtRandomPlace(spec) {
+        imageSpecs.splice(probable.roll(imageSpecs.length), 0, spec);
+      }
 
       function placeInstances(thing, numberOfThings) {
         var imageSpecs = [];
@@ -131,9 +136,9 @@ function ComposeScene(createOpts, createDone) {
             (roll(33) + roll(33) + roll(34))/100 * (maxRadius - minRadius);
 
           var specImage = thing.clone().rotate(roll(360))
-          if (roll(10) === 0) {
-            specImage.invert();
-          }
+          // if (roll(10) === 0) {
+          //   specImage.invert();
+          // }
           if (roll(5) == 0) {
             specImage.color(
               [
