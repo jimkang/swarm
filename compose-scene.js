@@ -131,7 +131,7 @@ function ComposeScene(createOpts, createDone) {
           
           var angle = 2 * Math.PI * roll(100)/100;
           var radius = minRadius +
-            (roll(50) + roll(50))/100 * (maxRadius - minRadius);
+            (roll(33) + roll(33) + roll(34))/100 * (maxRadius - minRadius);
 
           var specImage = thing.clone().rotate(roll(360))
           if (roll(10) === 0) {
