@@ -1,6 +1,5 @@
 var config = require('./config');
 // var config = require('./test-config');
-var sb = require('standard-bail')();
 
 var Twit = require('twit');
 var async = require('async');

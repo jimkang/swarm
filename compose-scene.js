@@ -1,12 +1,9 @@
 const async = require('async');
-const queue = require('d3-queue').queue;
 const Jimp = require('jimp');
 const PasteBitmaps = require('paste-bitmaps');
 const probable = require('probable');
 const roll = probable.roll;
 const rollDie = probable.rollDie;
-const values = require('lodash.values');
-const easeCubicInOut = require('d3-ease').easeCubicInOut;
 
 function ComposeScene(createOpts, createDone) {
   var pasteBitmaps;

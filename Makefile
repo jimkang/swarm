@@ -1,7 +1,7 @@
 PROJECTNAME = swarm
 HOMEDIR = $(shell pwd)
 USER = bot
-SERVER = smidgeo
+SERVER = smallcatlabs
 SSHCMD = ssh $(USER)@$(SERVER)
 APPDIR = /opt/$(PROJECTNAME)
 
