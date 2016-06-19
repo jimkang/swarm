@@ -128,7 +128,7 @@ function ComposeScene(createOpts, createDone) {
             (Math.log(probable.roll(100))/5) * (maxRadius - minRadius);
 
           imageSpecs.push({
-            jimpImage: thing,
+            jimpImage: thing.clone().rotate(probable.roll(360)),
             x: targetSpec.x + targetSpec.jimpImage.bitmap.width/2 + radius * Math.cos(angle),
             y: targetSpec.y + targetSpec.jimpImage.bitmap.height/2 + radius * Math.sin(angle) 
           });
