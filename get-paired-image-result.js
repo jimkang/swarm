@@ -6,6 +6,9 @@ var pluck = require('lodash.pluck');
 var probable = require('probable');
 var iscool = require('iscool')();
 var splitToWords = require('split-to-words');
+var animals = require('./animals');
+var plants = require('./plants');
+var callNextTick = require('call-next-tick');
 
 function getRelatedImageResult(opts, allDone) {
   var twit;
@@ -42,12 +45,25 @@ function getRelatedImageResult(opts, allDone) {
   );
 
   function getPrimaryConcept(done) {
-    var opts = {
-      customParams: {
-        limit: 5
+    if (probable.roll(5) === 0) {
+      var opts = {
+        customParams: {
+          limit: 5
+        }
+      };
+      wordnok.getRandomWords(opts, done);
+    }
+    else {
+      var topic;
+      if (probable.roll(5) > 2) {
+        topic = probable.pickFromArray(plants);
       }
-    };
-    wordnok.getRandomWords(opts, done);
+      else {
+        topic = probable.pickFromArray(animals);
+      }
+      console.log('topic', topic);
+      callNextTick(done, null, [topic]);
+    }
   }
   
   function getSecondaryConcept(thePrimaryImageResult, done) {
