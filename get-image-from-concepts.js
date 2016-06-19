@@ -15,7 +15,7 @@ function getImageFromConcepts(concepts, allDone) {
   function searchGIS(concept, done) {
     var gisOpts = {
       searchTerm: concept,
-      queryStringAddition: '&tbs=ic:trans'
+      queryStringAddition: '&tbs=ic:trans,itp:photo'
     };
     gis(gisOpts, checkGISResults);
 
