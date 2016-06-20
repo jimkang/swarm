@@ -9,7 +9,7 @@ pushall: sync
 	git push origin master
 
 sync:
-	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude data/
+	rsync -a $(HOMEDIR) $(USER)@$(SERVER):/opt/ --exclude node_modules/ --exclude image-output/
 	$(SSHCMD) "cd $(APPDIR) && npm install"
 
 # check-log:

@@ -55,13 +55,12 @@ function ComposeScene(createOpts, createDone) {
       var bigThing = thing1;
       var smallThing = thing2;
 
-      if (thing2.bitmap.width * thing2.bitmap.height >
-        thing1.bitmap.width * thing1.bitmap.height) {
+      // if (thing2.bitmap.width * thing2.bitmap.height >
+      //   thing1.bitmap.width * thing1.bitmap.height) {
 
-        bigThing = thing2;
-        smallThing = thing1;
-      }
-      // bigThing.brightness(-1);
+      //   bigThing = thing2;
+      //   smallThing = thing1;
+      // }
 
       const imageWidth = 1280;
       const imageHeight = 768;
@@ -77,7 +76,7 @@ function ComposeScene(createOpts, createDone) {
         smallThing.resize(128, Jimp.AUTO);
       }
 
-      var bigImageSpecs = placeInstances(bigThing, rollDie(3));
+      var bigImageSpecs = placeInstances(bigThing, 1);
       var imageSpecs = placeSwarm(smallThing, 100 + roll(150), bigImageSpecs);
       bigImageSpecs.forEach(insertSpecAtRandomPlace);
 
@@ -139,7 +138,7 @@ function ComposeScene(createOpts, createDone) {
           // if (roll(10) === 0) {
           //   specImage.invert();
           // }
-          if (roll(5) == 0) {
+          if (roll(100) == 0) {
             specImage.color(
               [
                 {
